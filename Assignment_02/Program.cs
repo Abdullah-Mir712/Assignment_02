@@ -4,9 +4,9 @@ namespace Assignment_02
 {
     public class BankAccount
     {
-        int AccountNumber;
-        string AccountHolderName;
-        int Balance;
+        public int AccountNumber;
+        public string AccountHolderName;
+        public int Balance;
 
         public BankAccount(int accountnumber, string accountholdername, int balance)
         {
@@ -42,6 +42,16 @@ namespace Assignment_02
         {
             Interest = interestrate;
         }
+        public override void Deposit(int amount)
+        {
+            Balance = Balance + amount + ((amount*Interest)/100);
+            Console.WriteLine($"Your deposited amount with interest is {Balance}");
+        }
+    }
+
+    public class CheckingAccount
+    {
+
     }
 
     class Program
