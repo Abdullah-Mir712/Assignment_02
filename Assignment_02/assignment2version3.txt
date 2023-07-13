@@ -1,0 +1,149 @@
+// BankAccount class (Abstraction)
+public class BankAccount
+{
+    private string accountNumber;
+    private string accountHolderName;
+    private decimal balance;
+
+    public BankAccount(string accountNumber, string accountHolderName)
+    {
+        this.accountNumber = accountNumber;
+        this.accountHolderName = accountHolderName;
+        this.balance = 0.0m;
+    }
+
+    public string AccountNumber // Encapsulation - Private data accessed through public property
+    {
+        get { return accountNumber; }
+        set { accountNumber = value; }
+    }
+
+    public string AccountHolderName // Encapsulation - Private data accessed through public property
+    {
+        get { return accountHolderName; }
+        set { accountHolderName = value; }
+    }
+
+    public decimal Balance // Encapsulation - Private data accessed through public property
+    {
+        get { return balance; }
+        set { balance = value; }
+    }
+
+    public virtual void CalculateInterest() // Polymorphism - Method to be overridden by subclasses
+    {
+        // Common implementation for calculating interest
+    }
+
+    public virtual void Deposit(decimal amount) // Polymorphism - Method can be overloaded with different parameters
+    {
+        if (amount > 0)
+        {
+            balance += amount;
+            Console.WriteLine($"Deposited {amount} into account {accountNumber}. New balance: {balance}");
+        }
+        else
+        {
+            Console.WriteLine("Invalid amount for deposit.");
+        }
+    }
+
+    public virtual void Withdraw(decimal amount) // Polymorphism - Method can be overloaded with different parameters
+    {
+        if (amount > 0 && amount <= balance)
+        {
+            balance -= amount;
+            Console.WriteLine($"Withdrew {amount} from account {accountNumber}. New balance: {balance}");
+        }
+        else
+        {
+            Console.WriteLine("Insufficient funds or invalid amount for withdrawal.");
+        }
+    }
+}
+
+// SavingsAccount class (Inheritance, Polymorphism)
+public class SavingsAccount : BankAccount
+{
+    private decimal interestRate;
+
+    public SavingsAccount(string accountNumber, string accountHolderName)
+        : base(accountNumber, accountHolderName)
+    {
+        interestRate = 0.05m; // 5% interest rate for savings accounts
+    }
+
+    public override void CalculateInterest() // Polymorphism - Method overriding
+    {
+        decimal interest = Balance * interestRate;
+        Deposit(interest);
+    }
+}
+
+// CheckingAccount class (Inheritance, Polymorphism)
+public class CheckingAccount : BankAccount
+{
+    public CheckingAccount(string accountNumber, string accountHolderName)
+        : base(accountNumber, accountHolderName)
+    {
+    }
+}
+
+// LoanAccount class (Inheritance, Polymorphism)
+public class LoanAccount : BankAccount
+{
+    private decimal interestRate;
+
+    public LoanAccount(string accountNumber, string accountHolderName)
+        : base(accountNumber, accountHolderName)
+    {
+        interestRate = 0.08m; // 8% interest rate for loan accounts
+    }
+
+    public override void CalculateInterest() // Polymorphism - Method overriding
+    {
+        decimal interest = Balance * interestRate;
+        Deposit(interest);
+    }
+}
+
+// ITransaction interface
+public interface ITransaction
+{
+    void ExecuteTransaction(decimal amount);
+    void PrintTransaction();
+}
+
+// Bank class (Association, Aggregation, Dependency)
+public class Bank
+{
+    private List<BankAccount> bankAccounts;
+
+    public Bank()
+    {
+        bankAccounts = new List<BankAccount>();
+    }
+
+    public void CreateAccount(string accountNumber, string accountHolderName, string accountType)
+    {
+        BankAccount account;
+        if (accountType == "Savings")
+        {
+            account = new SavingsAccount(accountNumber, accountHolderName);
+        }
+        else if (accountType == "Checking")
+        {
+            account = new CheckingAccount(accountNumber, accountHolderName);
+        }
+        else if (accountType == "Loan")
+        {
+            account = new LoanAccount(accountNumber, accountHolderName);
+        }
+        else
+        {
+            throw new ArgumentException("Invalid account type.");
+        }
+
+        bankAccounts.Add(account);
+    }
+}
