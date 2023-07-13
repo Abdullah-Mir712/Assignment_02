@@ -20,6 +20,14 @@ namespace Assignment_02
         {
             return AccountNumber;
         }
+        //public string getAccountHoldername()
+        //{
+        //    return AccountHolderName;
+        //}
+        //public int getBalance()
+        //{
+        //    return Balance;
+        //}
 
         public BankAccount(int accountnumber, string accountholdername, int balance)
         {
@@ -54,6 +62,7 @@ namespace Assignment_02
     public class SavingAccount : BankAccount
     {
         int Interest;
+        
         public SavingAccount(int accountnumber, string accountholdername, int balance, int interestrate) : base(accountnumber, accountholdername, balance)
         {
             Interest = interestrate;
